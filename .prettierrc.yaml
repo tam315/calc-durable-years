@@ -1,0 +1,9 @@
+semi: false
+singleQuote: true
+trailingComma: 'all'
+arrowParens: 'avoid'
+printWidth: 80
+plugins: ['prettier-plugin-organize-imports']
+# 以下をコメントアウトすると、format時に未使用のimport文を削除する処理を停止することができる。
+# バグ調査等においてコードのコメントアウトを散発的に繰り返したいときに使うと便利。
+# organizeImportsSkipDestructiveCodeActions: true
