@@ -1,71 +1,99 @@
 import { calcCurrentDurableYears } from '@/features/logics/calcCurrentDurableYears.ts'
 import '@/features/theme/theme'
-import { Button, css, TextField } from '@mui/material'
+import { Button, css, Divider, TextField } from '@mui/material'
+import Typography from '@mui/material/Typography'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { useState } from 'react'
 
 export const MainScreen = () => {
-  const [durableYears, setDurableYears] = useState<number>(1)
+  const [durableYears, setDurableYears] = useState<number | null>(null)
   const [creationDate, setCreationDate] = useState<Date | null>(null)
   const [gotDate, setGotDate] = useState<Date | null>(null)
-  const [resultYear, setResultYear] = useState<number | null>(null)
+  const [resultText, setResultText] = useState<string | null>(null)
 
   const calcResult = () => {
+    if (durableYears === null || creationDate === null || gotDate === null) {
+      setResultText('全ての項目を入力してください。')
+      return
+    }
+
+    if (durableYears <= 0) {
+      setResultText('法定耐用年数は1年以上で入力してください。')
+      return
+    }
+
+    if (creationDate >= gotDate) {
+      setResultText('使用開始日は製造日等よりも後の日付を入力してください。')
+      return
+    }
+
     const result = calcCurrentDurableYears({
       statutoryDurableYears: durableYears,
-      creationDate: creationDate?.toISOString() ?? '',
-      gotDate: gotDate?.toISOString() ?? '',
+      creationDate: creationDate.toISOString(),
+      gotDate: gotDate.toISOString(),
     })
-    setResultYear(result)
+    setResultText(`計算結果: 耐用年数は${result}年です。`)
   }
 
   return (
     <div css={styles.container}>
-      <div css={styles.title}>中古償却資産の耐用年数計算ツール</div>
-
-      <div css={styles.caption}>
-        ※計算結果の保証はしておりませんので、必ず自らの責任で計算を行ってください。
-      </div>
+      <Typography variant="h6">中古償却資産の耐用年数計算ツール</Typography>
 
       <div>
         <TextField
           label="法定耐用年数"
-          variant="standard"
+          variant="outlined"
           type="number"
           onChange={e => setDurableYears(Number(e.target.value))}
           value={durableYears}
+          sx={{ width: '100%', marginTop: 3 }}
         />
       </div>
 
       <div>
         <DesktopDatePicker
-          label="新品として製造された日（償却資産の製造日等）"
+          label="製造日、竣工日など"
           onChange={setCreationDate}
           value={creationDate}
+          sx={{ width: '100%', marginTop: 3 }}
         />
+        <Typography variant="caption">
+          ※中古償却資産が新品として世に出た日など
+        </Typography>
       </div>
 
       <div>
         <DesktopDatePicker
-          label="中古品の使用開始日（事業の用に供した日）"
+          label="使用開始日"
           onChange={setGotDate}
           value={gotDate}
+          sx={{ width: '100%', marginTop: 3 }}
         />
+        <Typography variant="caption">
+          ※ 中古償却資産を事業の用に供した日
+        </Typography>
       </div>
 
-      <Button variant="contained" onClick={calcResult}>
+      <Button
+        variant="contained"
+        onClick={calcResult}
+        sx={{ width: '100%', marginTop: 2 }}
+      >
         計算
       </Button>
 
-      {resultYear && <div>計算結果: 耐用年数は{resultYear}年です。</div>}
+      {resultText && (
+        <>
+          <Divider sx={{ marginTop: 3 }} />{' '}
+          <Typography sx={{ marginTop: 3 }}>{resultText}</Typography>
+        </>
+      )}
     </div>
   )
 }
 
 const styles = {
   container: css`
-    display: grid;
-    gap: 16px;
     max-width: 400px;
     margin: 24px auto;
   `,
