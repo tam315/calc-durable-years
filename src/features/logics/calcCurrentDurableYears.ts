@@ -9,8 +9,16 @@ type Args = {
   gotDate: string
 }
 
-export const calcCurrentDurableYears = (args: Args): number => {
-  debugger
+type Result = {
+  // 耐用年数
+  durableYears: number
+  // 計算式
+  calculationType: 'alreadyElapsed' | 'inElapsing'
+  // 経過月数
+  elapsedMonths: number
+}
+
+export const calcCurrentDurableYears = (args: Args): Result => {
   const { statutoryDurableYears, creationDate, gotDate } = args
 
   const statutoryDurableMonths = statutoryDurableYears * 12
@@ -28,5 +36,10 @@ export const calcCurrentDurableYears = (args: Args): number => {
 
   // - 最終計算結果の耐用年数が2年を満たない場合は2年とする。
   // - 最終計算結果につき、1年未満の月数は切り捨てとする。
-  return Math.max(2, Math.floor(resultMonths / 12))
+  return {
+    elapsedMonths,
+    durableYears: Math.max(2, Math.floor(resultMonths / 12)),
+    calculationType:
+      elapsedMonths > statutoryDurableMonths ? 'alreadyElapsed' : 'inElapsing',
+  }
 }

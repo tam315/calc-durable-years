@@ -3,36 +3,73 @@ import '@/features/theme/theme'
 import { Button, css, Divider, TextField } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 export const MainScreen = () => {
-  const [durableYears, setDurableYears] = useState<number | null>(null)
+  const [durableYearsString, setDurableYearsString] = useState<string>('')
   const [creationDate, setCreationDate] = useState<Date | null>(null)
   const [gotDate, setGotDate] = useState<Date | null>(null)
-  const [resultText, setResultText] = useState<string | null>(null)
+  const [resultMessage, setResultMessage] = useState<ReactNode>(null)
 
   const calcResult = () => {
-    if (durableYears === null || creationDate === null || gotDate === null) {
-      setResultText('全ての項目を入力してください。')
+    if (
+      durableYearsString === '' ||
+      creationDate === null ||
+      gotDate === null
+    ) {
+      setResultMessage('全ての項目を入力してください。')
       return
     }
 
-    if (durableYears <= 0) {
-      setResultText('法定耐用年数は1年以上で入力してください。')
+    const statutoryDurableYears = Number(durableYearsString)
+
+    if (Number.isNaN(statutoryDurableYears) || statutoryDurableYears < 1) {
+      setResultMessage('法定耐用年数は1年以上で入力してください。')
       return
     }
 
     if (creationDate >= gotDate) {
-      setResultText('使用開始日は製造日等よりも後の日付を入力してください。')
+      setResultMessage('使用開始日は製造日等よりも後の日付を入力してください。')
       return
     }
 
-    const result = calcCurrentDurableYears({
-      statutoryDurableYears: durableYears,
-      creationDate: creationDate.toISOString(),
-      gotDate: gotDate.toISOString(),
-    })
-    setResultText(`計算結果: 耐用年数は${result}年です。`)
+    const { durableYears, calculationType, elapsedMonths } =
+      calcCurrentDurableYears({
+        statutoryDurableYears,
+        creationDate: creationDate.toISOString(),
+        gotDate: gotDate.toISOString(),
+      })
+
+    let formula: string
+    switch (calculationType) {
+      case 'alreadyElapsed': {
+        formula = '耐用年数 = 法定耐用年数 * 0.2 (ただし最短でも2年)'
+        break
+      }
+      case 'inElapsing': {
+        formula = `耐用年数 = 法定耐用月数 - 経過月数 + 経過月数 * 0.2 (ただし最短でも2年)`
+        break
+      }
+    }
+
+    setResultMessage(
+      <>
+        <Typography>計算結果: 耐用年数は{durableYears}年です。</Typography>
+        <div css={styles.description}>
+          <Typography variant="caption">採用計算式: {formula}</Typography>
+          <Typography variant="caption"></Typography>
+          <br />
+          <Typography variant="caption">
+            法定耐用年数: {statutoryDurableYears * 12}ヶ月
+          </Typography>
+          <br />
+          <Typography variant="caption">
+            経過月数: {elapsedMonths}ヶ月
+          </Typography>
+          <br />
+        </div>
+      </>,
+    )
   }
 
   return (
@@ -44,48 +81,44 @@ export const MainScreen = () => {
           label="法定耐用年数"
           variant="outlined"
           type="number"
-          onChange={e => setDurableYears(Number(e.target.value))}
-          value={durableYears}
+          onChange={e => {
+            setDurableYearsString(e.target.value)
+          }}
+          value={durableYearsString}
           sx={{ width: '100%', marginTop: 3 }}
         />
       </div>
 
       <div>
         <DesktopDatePicker
-          label="製造日、竣工日など"
+          label="新品として販売された日、または竣工日など"
           onChange={setCreationDate}
           value={creationDate}
           sx={{ width: '100%', marginTop: 3 }}
         />
-        <Typography variant="caption">
-          ※中古償却資産が新品として世に出た日など
-        </Typography>
       </div>
 
       <div>
         <DesktopDatePicker
-          label="使用開始日"
+          label="中古償却資産を事業の用に供した日"
           onChange={setGotDate}
           value={gotDate}
           sx={{ width: '100%', marginTop: 3 }}
         />
-        <Typography variant="caption">
-          ※ 中古償却資産を事業の用に供した日
-        </Typography>
       </div>
 
       <Button
         variant="contained"
         onClick={calcResult}
-        sx={{ width: '100%', marginTop: 2 }}
+        sx={{ width: '100%', marginTop: 3 }}
       >
         計算
       </Button>
 
-      {resultText && (
+      {resultMessage && (
         <>
-          <Divider sx={{ marginTop: 3 }} />{' '}
-          <Typography sx={{ marginTop: 3 }}>{resultText}</Typography>
+          <Divider sx={{ marginTop: 3 }} />
+          <Typography sx={{ marginTop: 3 }}>{resultMessage}</Typography>
         </>
       )}
     </div>
@@ -104,5 +137,8 @@ const styles = {
   caption: css`
     color: #666;
     font-size: 12px;
+  `,
+  description: css`
+    margin-top: 16px;
   `,
 }
