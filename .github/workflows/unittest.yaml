@@ -1,0 +1,27 @@
+name: Test web client
+
+on:
+  - push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+          cache: 'pnpm'
+
+      - run: pnpm i --frozen-lockfile
+
+      - run: pnpm test
