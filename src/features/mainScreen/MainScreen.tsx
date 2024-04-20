@@ -1,6 +1,6 @@
 import { calcCurrentDurableYears } from '@/features/logics/calcCurrentDurableYears.ts'
 import '@/features/theme/theme'
-import { Button, css, Divider, TextField } from '@mui/material'
+import { Button, css, Divider, Link, TextField } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { ReactNode, useState } from 'react'
@@ -121,6 +121,15 @@ export const MainScreen = () => {
           <Typography sx={{ marginTop: 3 }}>{resultMessage}</Typography>
         </>
       )}
+
+      <Link
+        css={styles.footer}
+        href="https://www.yuuniworks.com"
+        underline="none"
+        variant="body2"
+      >
+        Made by Yuuniworks
+      </Link>
     </div>
   )
 }
@@ -140,5 +149,14 @@ const styles = {
   `,
   description: css`
     margin-top: 16px;
+  `,
+  footer: css`
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
   `,
 }
