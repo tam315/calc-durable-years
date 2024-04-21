@@ -137,7 +137,8 @@ export const MainScreen = () => {
 const styles = {
   container: css`
     max-width: 400px;
-    margin: 24px 16px;
+    margin: auto;
+    padding: 16px 8px;
   `,
   title: css`
     font-size: 20px;
