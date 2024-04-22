@@ -91,7 +91,7 @@ export const MainScreen = () => {
 
       <div>
         <DesktopDatePicker
-          label="新品として販売された日、または竣工日など"
+          label="新品として販売された日、竣工日など"
           onChange={setCreationDate}
           value={creationDate}
           sx={{ width: '100%', marginTop: 3 }}
@@ -100,7 +100,7 @@ export const MainScreen = () => {
 
       <div>
         <DesktopDatePicker
-          label="中古償却資産を事業の用に供した日"
+          label="中古品を事業で使い始めた日"
           onChange={setGotDate}
           value={gotDate}
           sx={{ width: '100%', marginTop: 3 }}
