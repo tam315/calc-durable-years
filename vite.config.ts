@@ -9,4 +9,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  test: {
+    include: ['**/src/**/*.(spec|test).(js|jsx|ts|tsx)', '!tests/**/*'],
+  },
 })
