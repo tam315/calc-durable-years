@@ -44,7 +44,7 @@ jobs:
       - name: Post to a Slack channel
         if: env.no_compatible == 'yes' && env.incompatible == 'yes'
         id: slack
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v1.27.0
         with:
           channel-id: 'C07FK03HKG9'
           slack-message: '<https://github.com/junkboy0315/calc-durable-years|calc-durable-years>にSemVer範囲外のアップデートがあります。'
