@@ -1,12 +1,13 @@
-import { Page, expect, test } from '@playwright/test'
+import { type Page, expect, test } from '@playwright/test'
 
 const getUtils = (page: Page) => {
   const gotoPage = () => page.goto('http://localhost:5173/')
 
   const durableYearsInput = page.getByLabel('法定耐用年数')
 
-  const creationDateInput =
-    page.getByLabel('新品として販売された日、竣工日など')
+  const creationDateInput = page.getByLabel(
+    '新品として販売された日、竣工日など',
+  )
 
   const gotDateInput = page.getByLabel('中古品を事業で使い始めた日')
 

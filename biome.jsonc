@@ -1,0 +1,55 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "ignore": [
+      "**/tsconfig*.json",
+      "new-relic.js",
+      "package.json",
+      "package-lock.yaml"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": true,
+      "style": {
+        "useNamingConvention": "off",
+        "useFilenamingConvention": "off",
+        "noDefaultExport": "off"
+      },
+      "correctness": {},
+      "performance": {
+        "useTopLevelRegex": "off"
+      }
+    },
+    "ignore": ["new-relic.js"]
+  },
+  // JS固有の設定
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded"
+    }
+  },
+  // JSON固有の設定
+  "json": {
+    "parser": {
+      // tsconfigにコメントを入れたときに赤くなるので、コメントを許可する
+      "allowComments": true
+    }
+  },
+  // gitignoreに書いてあるファイルは触らない
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}
