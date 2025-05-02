@@ -1,9 +1,9 @@
 import { calcCurrentDurableYears } from '@/features/logics/calcCurrentDurableYears.ts'
 import '@/features/theme/theme'
-import { Button, css, Divider, Link, TextField } from '@mui/material'
+import { Button, Divider, Link, TextField, css } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 export const MainScreen = () => {
   const [durableYearsString, setDurableYearsString] = useState<string>('')
@@ -47,8 +47,12 @@ export const MainScreen = () => {
         break
       }
       case 'inElapsing': {
-        formula = `耐用年数 = 法定耐用月数 - 経過月数 + 経過月数 * 0.2 (ただし最短でも2年)`
+        formula =
+          '耐用年数 = 法定耐用月数 - 経過月数 + 経過月数 * 0.2 (ただし最短でも2年)'
         break
+      }
+      default: {
+        throw new Error(calculationType satisfies never)
       }
     }
 
@@ -57,7 +61,6 @@ export const MainScreen = () => {
         <Typography>計算結果: 耐用年数は{durableYears}年です。</Typography>
         <div css={styles.description}>
           <Typography variant="caption">採用計算式: {formula}</Typography>
-          <Typography variant="caption"></Typography>
           <br />
           <Typography variant="caption">
             法定耐用年数: {statutoryDurableYears * 12}ヶ月
@@ -81,7 +84,7 @@ export const MainScreen = () => {
           label="法定耐用年数"
           variant="outlined"
           type="number"
-          onChange={e => {
+          onChange={(e) => {
             setDurableYearsString(e.target.value)
           }}
           value={durableYearsString}

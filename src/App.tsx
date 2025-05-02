@@ -1,7 +1,7 @@
 import { MainScreen } from '@/features/mainScreen/MainScreen.tsx'
 import '@/features/theme/theme'
 import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { ja } from 'date-fns/locale/ja'
 
 function App() {
