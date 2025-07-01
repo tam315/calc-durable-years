@@ -1,5 +1,5 @@
-import { calcElapsedMonth } from '@/features/logics/calcElapsedMonth.ts'
 import { expect, test } from 'vitest'
+import { calcElapsedMonth } from '@/features/logics/calcElapsedMonth.ts'
 
 test('経過月数の計算', () => {
   // 取得日前日までの経過日数は満364日なので、繰り上げて12ヶ月

@@ -1,5 +1,5 @@
-import { calcCurrentDurableYears } from '@/features/logics/calcCurrentDurableYears.ts'
 import { expect, test } from 'vitest'
+import { calcCurrentDurableYears } from '@/features/logics/calcCurrentDurableYears.ts'
 
 test('耐用年数10年', () => {
   // 使用期間最短のケース
