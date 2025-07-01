@@ -1,4 +1,4 @@
-import { type Page, expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 
 const getUtils = (page: Page) => {
   const gotoPage = () => page.goto('http://localhost:5173/')
