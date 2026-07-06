@@ -24,6 +24,15 @@ const getUtils = (page: Page) => {
   }
 }
 
+const fillDate = async (
+  dateInput: ReturnType<Page['getByRole']>,
+  date: { year: string; month: string; day: string },
+) => {
+  await dateInput.getByRole('spinbutton', { name: 'Year' }).fill(date.year)
+  await dateInput.getByRole('spinbutton', { name: 'Month' }).fill(date.month)
+  await dateInput.getByRole('spinbutton', { name: 'Day' }).fill(date.day)
+}
+
 test('has title', async ({ page }) => {
   const {
     gotoPage,
@@ -37,13 +46,9 @@ test('has title', async ({ page }) => {
 
   await durableYearsInput.fill('6')
 
-  await creationDateInput.click()
-  await page.keyboard.type('20200101')
-
-  await gotDateInput.click()
-  await page.keyboard.type('20230215')
+  await fillDate(creationDateInput, { year: '2020', month: '01', day: '01' })
+  await fillDate(gotDateInput, { year: '2023', month: '02', day: '15' })
 
   await calculateButton.click()
-  await page.pause()
   await expect(page.getByText(/耐用年数は3年です/)).toBeVisible()
 })

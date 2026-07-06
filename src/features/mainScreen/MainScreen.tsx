@@ -121,7 +121,7 @@ export const MainScreen = () => {
       {resultMessage && (
         <>
           <Divider sx={{ marginTop: 3 }} />
-          <Typography sx={{ marginTop: 3 }}>{resultMessage}</Typography>
+          <div css={styles.result}>{resultMessage}</div>
         </>
       )}
 
@@ -153,6 +153,9 @@ const styles = {
   `,
   description: css`
     margin-top: 16px;
+  `,
+  result: css`
+    margin-top: 24px;
   `,
   footer: css`
     position: fixed;
